@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신입사원 정보 입력 양식</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .section-guide {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        td input {
+            margin: 0;
+            width: 100%;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .btn-add {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .btn-add:hover {
+            background: #0056b3;
+            border-color: #0056b3;
+        }
+        
+        .btn-remove {
+            background: #f8f9fa;
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .btn-remove:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-submit {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+            padding: 12px 24px;
+            font-size: 15px;
+            width: 100%;
+            margin-top: 30px;
+        }
+        
+        .btn-submit:hover {
+            background: #218838;
+            border-color: #218838;
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        input[type="file"] {
+            cursor: pointer;
+        }
+        
+        .file-preview {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #007bff;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        
+        function EmployeeForm() {
+            const [formData, setFormData] = useState({
+                name: '',
+                phone: '',
+                email: '',
+                address: '',
+                bank: '',
+                accountNumber: '',
+                emergencyContacts: [{ relationship: '', phone: '' }],
+                relatedExperience: [{ company: '', position: '', startMonth: '', endMonth: '' }],
+                residenceRegistry: null,
+                bankbook: null,
+                graduationCertificate: null,
+                whtCertificate: null,
+                healthInsuranceCertificate: null
+            });
+            
+            const [submitted, setSubmitted] = useState(false);
+            const [loading, setLoading] = useState(false);
+            const [message, setMessage] = useState(null);
+            
+            const handleBasicChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({ ...prev, [name]: value }));
+            };
+            
+            const handleEmergencyChange = (index, field, value) => {
+                const newContacts = [...formData.emergencyContacts];
+                newContacts[index][field] = value;
+                setFormData(prev => ({ ...prev, emergencyContacts: newContacts }));
+            };
+            
+            const handleExperienceChange = (index, field, value) => {
+                const newExp = [...formData.relatedExperience];
+                newExp[index][field] = value;
+                setFormData(prev => ({ ...prev, relatedExperience: newExp }));
+            };
+            
+            const addEmergencyContact = () => {
+                setFormData(prev => ({
+                    ...prev,
+                    emergencyContacts: [...prev.emergencyContacts, { relationship: '', phone: '' }]
+                }));
+            };
+            
+            const removeEmergencyContact = (index) => {
+                setFormData(prev => ({
+                    ...prev,
+                    emergencyContacts: prev.emergencyContacts.filter((_, i) => i !== index)
+                }));
+            };
+            
+            const addExperience = () => {
+                setFormData(prev => ({
+                    ...prev,
+                    relatedExperience: [...prev.relatedExperience, { company: '', position: '', startMonth: '', endMonth: '' }]
+                }));
+            };
+            
+            const removeExperience = (index) => {
+                setFormData(prev => ({
+                    ...prev,
+                    relatedExperience: prev.relatedExperience.filter((_, i) => i !== index)
+                }));
+            };
+            
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                
+                // 필수 필드 검증
+                if (!formData.name.trim()) {
+                    setMessage({ type: 'error', text: '이름을 입력해주세요.' });
+                    return;
+                }
+                if (!formData.email.trim()) {
+                    setMessage({ type: 'error', text: '이메일을 입력해주세요.' });
+                    return;
+                }
+                
+                setLoading(true);
+                setMessage(null);
+                
+                try {
+                    // Google Sheets 연동을 위한 준비
+                    const dataToSubmit = {
+                        timestamp: new Date().toISOString(),
+                        name: formData.name,
+                        phone: formData.phone,
+                        email: formData.email,
+                        address: formData.address,
+                        bank: formData.bank,
+                        accountNumber: formData.accountNumber,
+                        emergencyContacts: JSON.stringify(formData.emergencyContacts),
+                        relatedExperience: JSON.stringify(formData.relatedExperience)
+                    };
+                    
+                    // Google Sheets 제출 (실제 연동 시 엔드포인트 URL 필요)
+                    const SHEET_URL = 'https://script.google.com/macros/d/{DEPLOYMENT_ID}/usercontent/'; // 실제 URL로 변경 필요
+                    
+                    // 로컬 저장 (테스트용)
+                    console.log('제출 데이터:', dataToSubmit);
+                    localStorage.setItem('employeeForm_' + Date.now(), JSON.stringify(dataToSubmit));
+                    
+                    // 성공 메시지
+                    setMessage({ 
+                        type: 'success', 
+                        text: '✓ 정보가 성공적으로 제출되었습니다. HR팀에서 확인 후 연락드리겠습니다.' 
+                    });
+                    
+                    setSubmitted(true);
+                    
+                    // 3초 후 폼 초기화
+                    setTimeout(() => {
+                        setFormData({
+                            name: '',
+                            phone: '',
+                            email: '',
+                            address: '',
+                            bank: '',
+                            accountNumber: '',
+                            emergencyContacts: [{ relationship: '', phone: '' }],
+                            relatedExperience: [{ company: '', position: '', startMonth: '', endMonth: '' }],
+                            residenceRegistry: null,
+                            bankbook: null,
+                            graduationCertificate: null,
+                            whtCertificate: null,
+                            healthInsuranceCertificate: null
+                        });
+                        setSubmitted(false);
+                    }, 3000);
+                    
+                } catch (error) {
+                    setMessage({ type: 'error', text: '제출 중 오류가 발생했습니다. 다시 시도해주세요.' });
+                } finally {
+                    setLoading(false);
+                }
+            };
+            
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>신입사원 정보 입력 양식</h1>
+                        <p>아래 정보를 입력하여 제출해주세요.</p>
+                    </div>
+                    
+                    {message && (
+                        <div className={`alert alert-${message.type}`}>
+                            {message.text}
+                        </div>
+                    )}
+                    
+                    <form onSubmit={handleSubmit}>
+                        {/* 기본 정보 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">기본 정보</h2>
+                            
+                            <div className="form-group">
+                                <label>이름 <span className="required">*</span></label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    value={formData.name}
+                                    onChange={handleBasicChange}
+                                    placeholder="홍길동"
+                                    required
+                                />
+                            </div>
+                            
+                            <div className="row">
+                                <div className="form-group">
+                                    <label>휴대폰</label>
+                                    <input 
+                                        type="tel" 
+                                        name="phone" 
+                                        value={formData.phone}
+                                        onChange={handleBasicChange}
+                                        placeholder="010-0000-0000"
+                                    />
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label>이메일 <span className="required">*</span></label>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        value={formData.email}
+                                        onChange={handleBasicChange}
+                                        placeholder="user@example.com"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* 주소 정보 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">주소 정보</h2>
+                            
+                            <div className="form-group">
+                                <label>주소</label>
+                                <input 
+                                    type="text" 
+                                    name="address" 
+                                    value={formData.address}
+                                    onChange={handleBasicChange}
+                                    placeholder="서울시 강남구 테헤란로 123"
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>등본 첨부</label>
+                                <input 
+                                    type="file" 
+                                    onChange={(e) => setFormData(prev => ({ ...prev, residenceRegistry: e.target.files[0] }))}
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                />
+                                {formData.residenceRegistry && (
+                                    <div className="file-preview">
+                                        ✓ {formData.residenceRegistry.name} 선택됨
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        
+                        {/* 계좌 정보 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">계좌 정보</h2>
+                            
+                            <div className="row">
+                                <div className="form-group">
+                                    <label>은행</label>
+                                    <input 
+                                        type="text" 
+                                        name="bank" 
+                                        value={formData.bank}
+                                        onChange={handleBasicChange}
+                                        placeholder="예: 국민은행, 우리은행"
+                                    />
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label>계좌번호</label>
+                                    <input 
+                                        type="text" 
+                                        name="accountNumber" 
+                                        value={formData.accountNumber}
+                                        onChange={handleBasicChange}
+                                        placeholder="000-000-000000"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>통장사본 첨부</label>
+                                <input 
+                                    type="file" 
+                                    onChange={(e) => setFormData(prev => ({ ...prev, bankbook: e.target.files[0] }))}
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                />
+                                {formData.bankbook && (
+                                    <div className="file-preview">
+                                        ✓ {formData.bankbook.name} 선택됨
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        
+                        {/* 비상연락망 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">비상연락망</h2>
+                            <p className="section-guide">본인 연락처 외 비상 시 연락가능한 배우자/친인척의 연락처 기재 (예: 어머니/010-0000-0000)</p>
+                            
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style={{width: '30%'}}>관계</th>
+                                            <th style={{width: '70%'}}>연락처</th>
+                                            <th style={{width: '60px'}}>관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {formData.emergencyContacts.map((contact, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="예) 어머니"
+                                                        value={contact.relationship}
+                                                        onChange={(e) => handleEmergencyChange(index, 'relationship', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input 
+                                                        type="tel" 
+                                                        placeholder="010-0000-0000"
+                                                        value={contact.phone}
+                                                        onChange={(e) => handleEmergencyChange(index, 'phone', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {formData.emergencyContacts.length > 1 && (
+                                                        <button 
+                                                            type="button" 
+                                                            className="btn-remove"
+                                                            onClick={() => removeEmergencyContact(index)}
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button 
+                                type="button" 
+                                className="btn-add"
+                                onClick={addEmergencyContact}
+                            >
+                                + 연락처 추가
+                            </button>
+                        </div>
+                        
+                        {/* 유관경력 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">유관경력</h2>
+                            <p className="section-guide">이전 근무 경력을 입력해주세요. (회사명, 직급, 근무기간 등)</p>
+                            
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style={{width: '25%'}}>회사명</th>
+                                            <th style={{width: '20%'}}>직급</th>
+                                            <th style={{width: '20%'}}>입사연월</th>
+                                            <th style={{width: '20%'}}>퇴사연월</th>
+                                            <th style={{width: '60px'}}>관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {formData.relatedExperience.map((exp, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="회사명"
+                                                        value={exp.company}
+                                                        onChange={(e) => handleExperienceChange(index, 'company', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="직급"
+                                                        value={exp.position}
+                                                        onChange={(e) => handleExperienceChange(index, 'position', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input 
+                                                        type="month" 
+                                                        value={exp.startMonth}
+                                                        onChange={(e) => handleExperienceChange(index, 'startMonth', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input 
+                                                        type="month" 
+                                                        value={exp.endMonth}
+                                                        onChange={(e) => handleExperienceChange(index, 'endMonth', e.target.value)}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    {formData.relatedExperience.length > 1 && (
+                                                        <button 
+                                                            type="button" 
+                                                            className="btn-remove"
+                                                            onClick={() => removeExperience(index)}
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <button 
+                                type="button" 
+                                className="btn-add"
+                                onClick={addExperience}
+                            >
+                                + 경력 추가
+                            </button>
+                        </div>
+                        
+                        {/* 서류 첨부 섹션 */}
+                        <div className="section">
+                            <h2 className="section-title">서류 첨부</h2>
+                            
+                            <div className="form-group">
+                                <label>졸업증명서</label>
+                                <input 
+                                    type="file" 
+                                    onChange={(e) => setFormData(prev => ({ ...prev, graduationCertificate: e.target.files[0] }))}
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                />
+                                {formData.graduationCertificate && (
+                                    <div className="file-preview">
+                                        ✓ {formData.graduationCertificate.name} 선택됨
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>원천징수영수증</label>
+                                <input 
+                                    type="file" 
+                                    onChange={(e) => setFormData(prev => ({ ...prev, whtCertificate: e.target.files[0] }))}
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                />
+                                {formData.whtCertificate && (
+                                    <div className="file-preview">
+                                        ✓ {formData.whtCertificate.name} 선택됨
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>건강보험득실확인서</label>
+                                <input 
+                                    type="file" 
+                                    onChange={(e) => setFormData(prev => ({ ...prev, healthInsuranceCertificate: e.target.files[0] }))}
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                />
+                                {formData.healthInsuranceCertificate && (
+                                    <div className="file-preview">
+                                        ✓ {formData.healthInsuranceCertificate.name} 선택됨
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        
+                        {/* 제출 버튼 */}
+                        <button 
+                            type="submit" 
+                            className="btn-submit"
+                            disabled={loading || submitted}
+                        >
+                            {loading ? '제출 중...' : '제출하기'}
+                        </button>
+                    </form>
+                </div>
+            );
+        }
+        
+        ReactDOM.render(<EmployeeForm />, document.getElementById('root'));
+    </script>
+</body>
+</html>
