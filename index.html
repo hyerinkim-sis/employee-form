@@ -376,7 +376,7 @@
     </div>
     
     <script>
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbztvS6KVDEeldA7vWfl3oLN77Vh0vLP7u_V5-PAhtFwKCOnsy5J95uJmqGcypqDMERN/exec';
+        const SHEET_URL = 'https://script.google.com/a/macros/theant.kr/s/AKfycbxj6SO4l8V5kMZhVvLjMT8RfHVg3kHGWq5hSz-wqJ8zjS1K3yJ2xeh4lzpURw24ZHxgFg/exec';
         
         // 파일 선택 표시
         document.getElementById('residenceRegistry').addEventListener('change', (e) => {
@@ -428,6 +428,16 @@
             msg.style.display = 'block';
         }
         
+        // 파일을 Base64로 변환하는 함수
+        async function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
         document.getElementById('employeeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -465,6 +475,25 @@
                 }
             });
             
+            // 파일을 Base64로 변환
+            let residenceRegistryBase64 = null;
+            let bandbookBase64 = null;
+            let graduationCertificateBase64 = null;
+            let whtCertificateBase64 = null;
+            let healthInsuranceCertificateBase64 = null;
+            
+            const residencyFile = document.getElementById('residenceRegistry').files[0];
+            const bankbookFile = document.getElementById('bankbook').files[0];
+            const graduationFile = document.getElementById('graduationCertificate').files[0];
+            const whtFile = document.getElementById('whtCertificate').files[0];
+            const healthFile = document.getElementById('healthInsuranceCertificate').files[0];
+            
+            if (residencyFile) residenceRegistryBase64 = await fileToBase64(residencyFile);
+            if (bankbookFile) bandbookBase64 = await fileToBase64(bankbookFile);
+            if (graduationFile) graduationCertificateBase64 = await fileToBase64(graduationFile);
+            if (whtFile) whtCertificateBase64 = await fileToBase64(whtFile);
+            if (healthFile) healthInsuranceCertificateBase64 = await fileToBase64(healthFile);
+            
             const data = {
                 timestamp: new Date().toISOString(),
                 name: name,
@@ -474,7 +503,12 @@
                 bank: document.getElementById('bank').value,
                 accountNumber: document.getElementById('accountNumber').value,
                 emergencyContacts: JSON.stringify(emergencyContacts),
-                relatedExperience: JSON.stringify(relatedExperience)
+                relatedExperience: JSON.stringify(relatedExperience),
+                residenceRegistry: residenceRegistryBase64,
+                bankbook: bandbookBase64,
+                graduationCertificate: graduationCertificateBase64,
+                whtCertificate: whtCertificateBase64,
+                healthInsuranceCertificate: healthInsuranceCertificateBase64
             };
             
             try {
