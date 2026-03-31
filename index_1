@@ -376,7 +376,7 @@
     </div>
     
     <script>
-        const SHEET_URL = 'https://script.google.com/a/macros/theant.kr/s/AKfycbyNjrxR3IdEx3TUCt3_uMizjrS557H0g8SScQWXlO84cM_z0584gJ_tDKDX7s0sOnCJdQ/exec';
+        const SHEET_URL = 'https://script.google.com/a/macros/theant.kr/s/AKfycbwOGJIONw9Im13of3Z8SXmfa2tpJAqPvWlisHT2y_lz3QVR3iiSkvNx0B1t02Csi_Bg1A/exec';
         
         document.getElementById('residenceRegistry').addEventListener('change', (e) => {
             document.getElementById('registryPreview').textContent = e.target.files[0] ? '✓ ' + e.target.files[0].name + ' 선택됨' : '';
